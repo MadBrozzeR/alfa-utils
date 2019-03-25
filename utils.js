@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const COLOR = {
     CLEAR: '\x1b[0m',
     RED: '\x1b[0;31m',
