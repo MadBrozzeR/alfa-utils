@@ -1,0 +1,18 @@
+{
+  "name": "alfa-utils",
+  "version": "1.0.0",
+  "description": "Some utils for Alfa projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "update-services": "./bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MadBrozzeR/alfa-utils.git"
+  },
+  "author": "MadBrozzeR",
+  "license": "ISC"
+}
