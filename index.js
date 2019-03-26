@@ -8,6 +8,16 @@ const BACKUP = `${SERVICES}-bu`;
 const DEV_SERVICES = '../corporate-services/.publish';
 // const DEV_THRIFT_SERVICES = '../thrift-services/.publish';
 
+function projectCheck(props) {
+    if (props['project-required'] && !props.project) {
+        logError(
+            new Error('Project required'),
+            'Project is required by `--project-required` argument but it wasn\'t provided'
+        );
+        process.exit(1);
+    }
+}
+
 function proceed(props) {
     const services = props.services || DEV_SERVICES;
     const project = props.project || PROJECT;
@@ -30,6 +40,7 @@ function copy(props = {}) {
     const project = props.project || PROJECT;
     const projectServices = project + SERVICES;
     const projectBackup = project + BACKUP;
+    projectCheck(props);
 
     fs.access(projectBackup, function (error) {
         if (error) {
@@ -54,6 +65,7 @@ function restore(props = {}) {
     const project = props.project || PROJECT;
     const projectServices = project + SERVICES;
     const projectBackup = project + BACKUP;
+    projectCheck(props);
 
     fs.access(projectBackup, function (error) {
         if (!logError(error, 'Nothing to reset. No backup directory was found')) {
