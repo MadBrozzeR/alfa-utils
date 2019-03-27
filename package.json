@@ -1,6 +1,6 @@
 {
   "name": "alfa-utils",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Some utils for Alfa projects",
   "main": "index.js",
   "scripts": {
