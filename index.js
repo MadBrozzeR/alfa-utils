@@ -2,10 +2,10 @@ const fs = require('fs');
 const { logError, logSuccess, copyDir, removeDir } = require('./utils.js');
 
 const PROJECT = '.';
-const SERVICES = '/node_modules/corporate-services';
-const BACKUP = `${SERVICES}-bu`;
+const MODULE = 'corporate-services';
+const BACKUP_SUFFIX = '-bu';
 
-const DEV_SERVICES = '../corporate-services/.publish';
+const DEV = '../corporate-services/.publish';
 // const DEV_THRIFT_SERVICES = '../thrift-services/.publish';
 
 function projectCheck(props) {
@@ -18,16 +18,21 @@ function projectCheck(props) {
     }
 }
 
-function proceed(props) {
-    const services = props.services || DEV_SERVICES;
-    const project = props.project || PROJECT;
-    const projectServices = project + SERVICES;
-    const projectBackup = project + BACKUP;
+function getPath(props) {
+    const module = (props.root || PROJECT) + '/node_modules/' + (props.module || MODULE);
 
-    copyDir(services, projectServices, function (error) {
+    return {
+        module,
+        backup: module + BACKUP_SUFFIX,
+        dev: props.dev || DEV
+    };
+}
+
+function proceed(path) {
+    copyDir(path.dev, path.module, function (error) {
         if (!logError(error, 'Services cannot be copied from DEV')) {
             logSuccess('Services copied from DEV');
-            copyDir(`${projectBackup}/node_modules`, `${projectServices}/node_modules`, function (error) {
+            copyDir(`${path.backup}/node_modules`, `${path.module}/node_modules`, function (error) {
                 if (!logError(error, 'Failed to copy \'node_modules\' from backup directory')) {
                     logSuccess('Services copied successfully');
                 }
@@ -37,24 +42,22 @@ function proceed(props) {
 }
 
 function copy(props = {}) {
-    const project = props.project || PROJECT;
-    const projectServices = project + SERVICES;
-    const projectBackup = project + BACKUP;
     projectCheck(props);
+    const path = getPath(props);
 
-    fs.access(projectBackup, function (error) {
+    fs.access(path.backup, function (error) {
         if (error) {
-            fs.rename(projectServices, projectBackup, function (error) {
+            fs.rename(path.module, path.backup, function (error) {
                 if (!logError(error, 'Services cannot be moved')) {
                     logSuccess('Services moved to backup');
-                    proceed(props);
+                    proceed(path);
                 }
             });
         } else {
-            removeDir(projectServices, function (error) {
+            removeDir(path.module, function (error) {
                 if (!logError(error, 'Services cannot be removed')) {
                     logSuccess('Services removed');
-                    proceed(props);
+                    proceed(path);
                 }
             });
         }
@@ -62,17 +65,15 @@ function copy(props = {}) {
 }
 
 function restore(props = {}) {
-    const project = props.project || PROJECT;
-    const projectServices = project + SERVICES;
-    const projectBackup = project + BACKUP;
     projectCheck(props);
+    const path = getPath(props);
 
-    fs.access(projectBackup, function (error) {
+    fs.access(path.backup, function (error) {
         if (!logError(error, 'Nothing to reset. No backup directory was found')) {
-            removeDir(projectServices, function (error) {
+            removeDir(path.module, function (error) {
                 if (!logError(error, 'Services directory cannot be removed')) {
                     logSuccess('Services directory removed');
-                    fs.rename(projectBackup, projectServices, function (error) {
+                    fs.rename(path.backup, path.module, function (error) {
                         if (!logError(error, 'Backup directory cannot be moved')) {
                             logSuccess('Backup successfully restored');
                         }

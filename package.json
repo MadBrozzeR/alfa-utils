@@ -1,13 +1,13 @@
 {
   "name": "alfa-utils",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Some utils for Alfa projects",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "update-services": "./bin/index.js"
+    "update-alfa-module": "./bin/index.js"
   },
   "repository": {
     "type": "git",
