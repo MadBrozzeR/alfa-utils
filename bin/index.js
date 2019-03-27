@@ -18,7 +18,7 @@ for (let index = 0; index < process.argv.length; ++index) {
         if (regMatch[1] in knownArgs) {
             config[regMatch[1]] = regMatch[2] === undefined ? true : regMatch[2];
         } else {
-            process.stderr.write(`Unknown argument: \x1b[0;31m--${regMatch[1]}\x1b[0m`);
+            process.stderr.write(`Unknown argument: \x1b[0;31m--${regMatch[1]}\x1b[0m\n`);
             process.exit(1);
         }
     }

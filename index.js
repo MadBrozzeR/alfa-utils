@@ -30,11 +30,11 @@ function getPath(props) {
 
 function proceed(path) {
     copyDir(path.dev, path.module, function (error) {
-        if (!logError(error, 'Services cannot be copied from DEV')) {
-            logSuccess('Services copied from DEV');
+        if (!logError(error, 'Module cannot be copied from DEV')) {
+            logSuccess('Module copied from DEV');
             copyDir(`${path.backup}/node_modules`, `${path.module}/node_modules`, function (error) {
                 if (!logError(error, 'Failed to copy \'node_modules\' from backup directory')) {
-                    logSuccess('Services copied successfully');
+                    logSuccess('Module copied successfully');
                 }
             });
         }
@@ -48,15 +48,15 @@ function copy(props = {}) {
     fs.access(path.backup, function (error) {
         if (error) {
             fs.rename(path.module, path.backup, function (error) {
-                if (!logError(error, 'Services cannot be moved')) {
-                    logSuccess('Services moved to backup');
+                if (!logError(error, 'Modlule cannot be moved')) {
+                    logSuccess('Module moved to backup');
                     proceed(path);
                 }
             });
         } else {
             removeDir(path.module, function (error) {
-                if (!logError(error, 'Services cannot be removed')) {
-                    logSuccess('Services removed');
+                if (!logError(error, 'Module cannot be removed')) {
+                    logSuccess('Module removed');
                     proceed(path);
                 }
             });
@@ -72,7 +72,7 @@ function restore(props = {}) {
         if (!logError(error, 'Nothing to reset. No backup directory was found')) {
             removeDir(path.module, function (error) {
                 if (!logError(error, 'Services directory cannot be removed')) {
-                    logSuccess('Services directory removed');
+                    logSuccess('Module directory removed');
                     fs.rename(path.backup, path.module, function (error) {
                         if (!logError(error, 'Backup directory cannot be moved')) {
                             logSuccess('Backup successfully restored');
