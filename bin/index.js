@@ -18,7 +18,7 @@ for (let index = 0; index < process.argv.length; ++index) {
     const regMatch = ARG_RE.exec(process.argv[index]);
     if (regMatch) {
         const argumentName = regMatch[1];
-        const argumentValue = regMatch[2] = undefined ? true : regMatch[2];
+        const argumentValue = regMatch[2] === undefined ? true : regMatch[2];
 
         if (argumentName in knownArgs) {
             if (typeof argumentValue === knownArgs[argumentName]) {
@@ -28,6 +28,7 @@ for (let index = 0; index < process.argv.length; ++index) {
                     `Argument ${COLOR.RED}--${argumentName}${COLOR.CLEAR} ` +
                     `must be of ${COLOR.RED}${knownArgs[argumentName]}${COLOR.CLEAR} type\n`
                 );
+                process.exit(1);
             }
         } else {
             process.stderr.write(`Unknown argument: ${COLOR.RED}--${regMatch[1]}${COLOR.CLEAR}\n`);
