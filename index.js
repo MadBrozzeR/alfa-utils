@@ -9,10 +9,10 @@ const DEV = '../corporate-services/.publish';
 // const DEV_THRIFT_SERVICES = '../thrift-services/.publish';
 
 function projectCheck(props) {
-    if (props['project-required'] && !props.project) {
+    if (props['root-required'] && !props.root) {
         logError(
             new Error('Project required'),
-            'Project is required by `--project-required` argument but it wasn\'t provided'
+            'Project is required by `--root-required` argument but it wasn\'t provided'
         );
         process.exit(1);
     }
