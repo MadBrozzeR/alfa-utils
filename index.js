@@ -6,7 +6,6 @@ const MODULE = 'corporate-services';
 const BACKUP_SUFFIX = '-bu';
 
 const DEV = '../corporate-services/.publish';
-// const DEV_THRIFT_SERVICES = '../thrift-services/.publish';
 
 function projectCheck(props) {
     if (props['root-required'] && !props.root) {
@@ -19,12 +18,14 @@ function projectCheck(props) {
 }
 
 function getPath(props) {
-    const module = (props.root || PROJECT) + '/node_modules/' + (props.module || MODULE);
+    const moduleName = props.module || MODULE;
+    const module = (props.root || PROJECT) + '/node_modules/' + moduleName;
 
     return {
-        module,
         backup: module + BACKUP_SUFFIX,
-        dev: props.dev || DEV
+        dev: props.dev || DEV,
+        module,
+        moduleName
     };
 }
 
@@ -34,7 +35,7 @@ function proceed(path) {
             logSuccess('Module copied from DEV');
             copyDir(`${path.backup}/node_modules`, `${path.module}/node_modules`, function (error) {
                 if (!logError(error, 'Failed to copy \'node_modules\' from backup directory')) {
-                    logSuccess('Module copied successfully');
+                    logSuccess(`Module '${path.moduleName}' copied successfully`);
                 }
             });
         }
