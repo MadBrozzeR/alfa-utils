@@ -26,13 +26,13 @@ function changeModuleVersion (project, modules, callback) {
         result = result.replace(regExp, function (found, indent, oldVersion) {
           if (oldVersion === modules[name]) {
             process.stdout.write(
-              `${COLOR.YELLOW}${name}${COLOR.CLEAR} is already ` +
+              `${COLOR.YELLOW}${name}${COLOR.CLEAR} module is already ` +
               `at version ${COLOR.GREEN}${modules[name]}${COLOR.CLEAR}\n`
             );
             return found;
           } else {
             process.stdout.write(
-              `Change ${COLOR.YELLOW}${name}${COLOR.CLEAR} version ` +
+              `${COLOR.YELLOW}${name}${COLOR.CLEAR} version changed` +
               `from ${COLOR.RED}${oldVersion}${COLOR.CLEAR} ` +
               `to ${COLOR.GREEN}${modules[name]}${COLOR.CLEAR}\n`
             );
