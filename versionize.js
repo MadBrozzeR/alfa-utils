@@ -23,13 +23,21 @@ function changeModuleVersion (project, modules, callback) {
       Object.keys(modules).forEach(function (name) {
         const regExp = new RegExp(`(\\s+)"${name}": "([.\\d^~x*]+)"`);
 
-        result = result.replace(regExp, function (_, indent, oldVersion) {
-          process.stdout.write(
-            `Change "${name}" version ` +
-            `from ${COLOR.RED}${oldVersion}${COLOR.CLEAR} ` +
-            `to ${COLOR.GREEN}${modules[name]}${COLOR.CLEAR}\n`
-          );
-          return `${indent}"${name}": "${modules[name]}"`;
+        result = result.replace(regExp, function (found, indent, oldVersion) {
+          if (oldVersion === modules[name]) {
+            process.stdout.write(
+              `${COLOR.YELLOW}${name}${COLOR.CLEAR} is already ` +
+              `at version ${COLOR.GREEN}${modules[name]}${COLOR.CLEAR}\n`
+            );
+            return found;
+          } else {
+            process.stdout.write(
+              `Change ${COLOR.YELLOW}${name}${COLOR.CLEAR} version ` +
+              `from ${COLOR.RED}${oldVersion}${COLOR.CLEAR} ` +
+              `to ${COLOR.GREEN}${modules[name]}${COLOR.CLEAR}\n`
+            );
+            return `${indent}"${name}": "${modules[name]}"`;
+          }
         });
       });
       if (result === originalData) {
@@ -89,7 +97,7 @@ function versionize (options) {
         });
 
         changeModuleVersion(project, modules, function () {
-            process.stdout.write(COLOR.GREEN + 'Versions update process coplete\n' + COLOR.CLEAR);
+            process.stdout.write(COLOR.GREEN + 'Versions update process complete\n' + COLOR.CLEAR);
         });
     });
 }
