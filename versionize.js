@@ -32,7 +32,7 @@ function changeModuleVersion (project, modules, callback) {
             return found;
           } else {
             process.stdout.write(
-              `${COLOR.YELLOW}${name}${COLOR.CLEAR} version changed` +
+              `${COLOR.YELLOW}${name}${COLOR.CLEAR} version changed ` +
               `from ${COLOR.RED}${oldVersion}${COLOR.CLEAR} ` +
               `to ${COLOR.GREEN}${modules[name]}${COLOR.CLEAR}\n`
             );
