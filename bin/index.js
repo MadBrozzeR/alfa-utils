@@ -4,7 +4,9 @@ const { COLOR } = require('../styles.js');
 
 const ARG_RE = /^--([\w-]+)(?:=(.+))?$/;
 
-const config = {};
+const config = {
+  free: []
+};
 
 const knownArgs = {
     'root-required': 'boolean',
@@ -34,7 +36,13 @@ for (let index = 0; index < process.argv.length; ++index) {
             process.stderr.write(`Unknown argument: ${COLOR.RED}--${regMatch[1]}${COLOR.CLEAR}\n`);
             process.exit(1);
         }
+    } else {
+        config.free.push(process.argv[index]);
     }
+}
+
+if (!config.root && config.free.length) {
+    config.root = config.free[config.free.length - 1];
 }
 
 if (config.restore) {
